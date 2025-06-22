@@ -1,3 +1,62 @@
+# Architecture Guidelines for Campmaster
+
+## Purpose and Overview
+
+- Professional and efficient campsite management application
+- Handles reservations, places, guests, payments, reports etc.
+
+## Event Sourcing Implementation
+
+- Uses Spatie Event Sourcing package
+- Reservations/bookings stored as events (e.g. ReservationCreated, PaymentReceived)
+- Aggregates manage reservation status
+- Projections/read models enable fast reporting
+
+## Data Model Structure
+
+### Rental Units
+
+- Generic `rental_units` or `accommodations` table instead of "places"
+- Supports different accommodation types:
+    - Camping places
+    - Tents
+    - Cottages
+    - Lodges
+- Flexibly expandable with new types
+
+### Bookings and Guests
+
+- `bookings` table contains main reservation data:
+    - Guest details
+    - Period
+    - Rental unit
+- `guests` table stores main guest/contact person data
+- Support for additional guests/children relationships
+
+### Extra Costs and Options
+
+- `products` table for all possible extras:
+    - Electricity
+    - Campfire wood
+    - Bed linen
+    - Extra guests
+    - Pets
+- `booking_items` table links extras to reservations
+- Flexible model requires no changes for new products/services
+
+### Tourist Tax Handling
+
+- Separate table for tourist tax rates by:
+    - Campsite/municipality
+    - Validity dates
+- Automatic per night/person calculation
+- Added to reservation as regular booking item
+
+## Key Advantages
+
+- Flexible, scalable and future-proof architecture
+- Simplified reporting and invoicing
+- Complete audit trail via event sourcing
 # Development Guidelines for Campmaster Frontend
 
 This document provides essential information for developers working on the Campmaster project.
