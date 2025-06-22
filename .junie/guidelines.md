@@ -146,3 +146,58 @@ npm run types
 - Laravel 12
 - Multi-tenancy support via Spatie's package
 - Inertia.js for server-side rendering
+
+## Multi-tenancy
+
+The application uses Spatie's Laravel Multitenancy package to implement subdomain-based multi-tenancy.
+
+### How It Works
+
+- Each tenant has a unique subdomain (e.g., `campingdenachtegaal.campmaster.nl`)
+- The base domain is configured in `.env` with the `APP_DOMAIN` variable (defaults to `campmaster.nl`)
+- When a request comes in, the application identifies the tenant based on the subdomain
+- Tenant-specific data is isolated using cache prefixing
+
+### Creating Tenants
+
+You can create tenants programmatically:
+
+```php
+use App\Models\Tenant;
+
+$tenant = Tenant::create([
+    'name' => 'Camping De Nachtegaal',
+    'domain' => 'campingdenachtegaal', // Just the subdomain part
+]);
+```
+
+Or using the artisan command:
+
+```bash
+php artisan tenants:create --name="Camping De Nachtegaal" --domain="campingdenachtegaal"
+```
+
+### Accessing Tenant Information
+
+In your application code, you can access the current tenant:
+
+```php
+$currentTenant = Spatie\Multitenancy\Models\Tenant::current();
+
+// Get the tenant's name
+$tenantName = $currentTenant->name;
+
+// Get the tenant's domain
+$tenantDomain = $currentTenant->domain;
+
+// Get the tenant's full domain (including base domain)
+$tenantFullDomain = $currentTenant->full_domain; // e.g., campingdenachtegaal.campmaster.nl
+```
+
+### Testing Multi-tenancy
+
+The test suite includes tests for the multi-tenancy functionality:
+
+```bash
+php artisan test tests/Feature/Multitenancy
+```

@@ -56,6 +56,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Domain
+    |--------------------------------------------------------------------------
+    |
+    | This domain is used for multitenancy to determine the base domain for
+    | all tenant subdomains. For example, if the domain is 'campmaster.nl',
+    | a tenant with domain 'campingdenachtegaal' would be accessible at
+    | 'campingdenachtegaal.campmaster.nl'.
+    |
+    */
+
+    'domain' => env('APP_DOMAIN', 'campmaster.nl'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
