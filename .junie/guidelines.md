@@ -1,6 +1,7 @@
 # Development Guidelines for Campmaster Frontend
 
-This document provides essential information for developers working on the Campmaster Frontend project.
+This document provides essential information for developers working on the Campmaster project.
+
 
 ## Build & Configuration
 
