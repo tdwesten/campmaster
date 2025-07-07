@@ -3,47 +3,32 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\Multitenancy\Models\Tenant as BaseTenant;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
-class Tenant extends BaseTenant
+class Tenant extends Model
 {
-    use HasFactory, HasUuids;
+    use HasSlug;
+    use HasUuids;
 
     /**
-     * The "type" of the primary key ID.
+     * The attributes that are mass assignable.
      *
-     * @var string
+     * @var array<int, string>
      */
-    protected $keyType = 'string';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
-
     protected $fillable = [
         'name',
-        'domain',
     ];
 
-    public static function booted()
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions(): SlugOptions
     {
-        static::creating(function (Tenant $tenant) {
-            // Ensure domain is lowercase
-            $tenant->domain = strtolower($tenant->domain);
-        });
-    }
-
-    public function getDomainAttribute(): string
-    {
-        return $this->attributes['domain'];
-    }
-
-    public function getFullDomainAttribute(): string
-    {
-        return "{$this->domain}." . config('app.domain');
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('domain')
+            ->preventOverwrite();
     }
 }

@@ -15,8 +15,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('reservations');
     });
 
-    // Guest management routes
-    Route::resource('guests', \App\Http\Controllers\GuestController::class);
 });
 
 require __DIR__.'/settings.php';

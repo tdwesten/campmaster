@@ -13,10 +13,24 @@
 - Projections/read models enable fast reporting
 
 ## Data Model Structure
+- Use UUIDs for unique identifiers
+- Database migrations for schema management
+- Create factories for test data generation
+- Use Action pattern for business logic
 
-### Rental Units
+### Tenants
+- Multi-tenancy via subdomains eg. `campingdenachtegaal.campmaster.nl`
+- Fields in `tenants` table:
+    - `id`: UUID primary key
+    - `name`: Name of the campsite
+    - `domain`: Subdomain for the tenant (e.g. `campingdenachtegaal`), automatically generated as a slug from the name and cannot be overwritten
+    - `created_at`, `updated_at`: Timestamps
 
-- Generic `rental_units` or `accommodations` table instead of "places"
+### Accommodations
+
+- Generic `accommodations` tabl
+    - Contains all rental units
+    - Includes common fields like name, description, capacity, etc.
 - Supports different accommodation types:
     - Camping places
     - Tents
@@ -31,7 +45,7 @@
     - Period
     - Rental unit
 - `guests` table stores main guest/contact person data
-- Support for additional guests/children relationships
+
 
 ### Extra Costs and Options
 
@@ -69,6 +83,30 @@ This document provides essential information for developers working on the Campm
 - Node.js (latest LTS recommended)
 - Composer
 - npm
+- Laravel 12
+- Inertia.js
+- React 19
+- Tailwind CSS
+- Shadcn UI
+- Vite
+- Pest PHP for testing
+
+### Laravel specifics
+- Uses Laravel 12 with Inertia.js for server-side rendering
+- Multi-tenancy implemented using a tenants table and subdomain routing
+- Event sourcing for reservations and bookings
+- Use UUID for unique identifiers
+- Database migrations for schema management
+- Use Action pattern for business logic
+- Use Form Requests for validation
+- Use Policies for authorization
+- Use Jobs for background processing
+- Use Events and Listeners for decoupled event handling
+- Use Service Providers for bootstrapping application services
+- Use Spatie Settings for configuration management
+- Use Spatie Media Library for file uploads and media management
+- Use Spatie Permissions for role-based access control
+- Use Spatie Activity Log for auditing changes
 
 ### Setup
 1. Clone the repository
@@ -110,6 +148,7 @@ npm run build:ssr   # Build with server-side rendering
 ```
 
 ## Testing
+- We use Pest PHP for testing, which is built on top of PHPUnit.
 
 ### Test Structure
 - **Feature Tests**: `tests/Feature/` - Test HTTP endpoints and application features
@@ -131,6 +170,9 @@ php artisan test tests/Unit/SimpleCalculatorTest.php
 
 ### Writing Tests
 This project uses [Pest PHP](https://pestphp.com/) for testing, which provides a more expressive syntax on top of PHPUnit.
+- Use `act`, `assert`, and `expect` methods for assertions
+- Keep tests isolated and independent
+- Use descriptive names for test methods
 
 #### Example Unit Test
 ```php
