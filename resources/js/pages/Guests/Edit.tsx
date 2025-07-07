@@ -1,10 +1,12 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { BreadcrumbItem } from '@/types';
 import { Guest } from '@/types/models';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import AppLayout from '@/layouts/app-layout';
 import {
   Card,
   CardContent,
@@ -19,6 +21,25 @@ interface EditProps {
 }
 
 export default function Edit({ guest }: EditProps) {
+  const breadcrumbs: BreadcrumbItem[] = [
+    {
+      title: 'Dashboard',
+      href: '/',
+    },
+    {
+      title: 'Guests',
+      href: '/guests',
+    },
+    {
+      title: `${guest.first_name} ${guest.last_name}`,
+      href: route('guests.show', guest.id),
+    },
+    {
+      title: 'Edit',
+      href: route('guests.edit', guest.id),
+    },
+  ];
+
   const form = useForm({
     first_name: guest.first_name,
     last_name: guest.last_name,
@@ -38,7 +59,7 @@ export default function Edit({ guest }: EditProps) {
   }
 
   return (
-    <>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={`Edit Guest: ${guest.first_name} ${guest.last_name}`} />
       <div className="container py-8">
         <div className="flex justify-between items-center mb-6">
@@ -265,6 +286,6 @@ export default function Edit({ guest }: EditProps) {
           </form>
         </Card>
       </div>
-    </>
+    </AppLayout>
   );
 }

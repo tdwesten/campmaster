@@ -1,9 +1,10 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { PageProps, BreadcrumbItem } from '@/types';
 import { Guest } from '@/types/models';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
+import AppLayout from '@/layouts/app-layout';
 import {
   Card,
   CardContent,
@@ -18,8 +19,23 @@ interface GuestShowProps extends PageProps {
 }
 
 export default function Show({ guest }: GuestShowProps) {
+  const breadcrumbs: BreadcrumbItem[] = [
+    {
+      title: 'Dashboard',
+      href: '/',
+    },
+    {
+      title: 'Guests',
+      href: '/guests',
+    },
+    {
+      title: `${guest.first_name} ${guest.last_name}`,
+      href: route('guests.show', guest.id),
+    },
+  ];
+
   return (
-    <>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title={`Guest: ${guest.first_name} ${guest.last_name}`} />
       <div className="container py-8">
         <div className="flex justify-between items-center mb-6">
@@ -109,6 +125,6 @@ export default function Show({ guest }: GuestShowProps) {
           </CardFooter>
         </Card>
       </div>
-    </>
+    </AppLayout>
   );
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import { PageProps, BreadcrumbItem } from '@/types';
 import { Guest } from '@/types/models';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import AppLayout from '@/layouts/app-layout';
 import {
   Table,
   TableBody,
@@ -53,8 +54,19 @@ interface GuestsIndexProps extends PageProps {
   };
 }
 
-export default function Index({ guests, filters }: GuestsIndexProps) {
-  const [search, setSearch] = useState(filters.search || '');
+const breadcrumbs: BreadcrumbItem[] = [
+  {
+    title: 'Dashboard',
+    href: '/',
+  },
+  {
+    title: 'Guests',
+    href: '/guests',
+  },
+];
+
+export default function Index({ guests, filters = {} }: GuestsIndexProps) {
+  const [search, setSearch] = useState(filters?.search || '');
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +79,7 @@ export default function Index({ guests, filters }: GuestsIndexProps) {
 
   const sortBy = (field: string) => {
     const direction =
-      filters.sort_field === field && filters.sort_direction === 'asc'
+      filters?.sort_field === field && filters?.sort_direction === 'asc'
         ? 'desc'
         : 'asc';
     router.get(
@@ -82,12 +94,12 @@ export default function Index({ guests, filters }: GuestsIndexProps) {
   };
 
   const getSortIcon = (field: string) => {
-    if (filters.sort_field !== field) return null;
-    return filters.sort_direction === 'asc' ? '↑' : '↓';
+    if (filters?.sort_field !== field) return null;
+    return filters?.sort_direction === 'asc' ? '↑' : '↓';
   };
 
   return (
-    <>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Guests" />
       <div className="container py-8">
         <div className="flex justify-between items-center mb-6">
@@ -142,7 +154,7 @@ export default function Index({ guests, filters }: GuestsIndexProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {guests.data.length === 0 ? (
+              {!guests.data || guests.data.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-4">
                     No guests found.
@@ -193,57 +205,59 @@ export default function Index({ guests, filters }: GuestsIndexProps) {
           </Table>
         </div>
 
-        <Pagination className="mt-6">
-          <PaginationContent>
-            {guests.meta.current_page > 1 && (
-              <PaginationItem>
-                <PaginationPrevious
-                  href={guests.links.prev || '#'}
-                  onClick={(e) => {
-                    if (guests.links.prev) {
-                      e.preventDefault();
-                      router.get(guests.links.prev);
-                    }
-                  }}
-                />
-              </PaginationItem>
-            )}
-
-            {guests.meta.links.slice(1, -1).map((link, i) => (
-              <PaginationItem key={i}>
-                {link.url ? (
-                  <PaginationLink
-                    href={link.url}
-                    isActive={link.active}
+        {guests.meta && (
+          <Pagination className="mt-6">
+            <PaginationContent>
+              {guests.meta.current_page > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious
+                    href={guests.links.prev || '#'}
                     onClick={(e) => {
-                      e.preventDefault();
-                      router.get(link.url as string);
+                      if (guests.links.prev) {
+                        e.preventDefault();
+                        router.get(guests.links.prev);
+                      }
                     }}
-                  >
-                    {link.label}
-                  </PaginationLink>
-                ) : (
-                  <PaginationEllipsis />
-                )}
-              </PaginationItem>
-            ))}
+                  />
+                </PaginationItem>
+              )}
 
-            {guests.meta.current_page < guests.meta.last_page && (
-              <PaginationItem>
-                <PaginationNext
-                  href={guests.links.next || '#'}
-                  onClick={(e) => {
-                    if (guests.links.next) {
-                      e.preventDefault();
-                      router.get(guests.links.next);
-                    }
-                  }}
-                />
-              </PaginationItem>
-            )}
-          </PaginationContent>
-        </Pagination>
+              {guests.meta.links.slice(1, -1).map((link, i) => (
+                <PaginationItem key={i}>
+                  {link.url ? (
+                    <PaginationLink
+                      href={link.url}
+                      isActive={link.active}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.get(link.url as string);
+                      }}
+                    >
+                      {link.label}
+                    </PaginationLink>
+                  ) : (
+                    <PaginationEllipsis />
+                  )}
+                </PaginationItem>
+              ))}
+
+              {guests.meta.current_page < guests.meta.last_page && (
+                <PaginationItem>
+                  <PaginationNext
+                    href={guests.links.next || '#'}
+                    onClick={(e) => {
+                      if (guests.links.next) {
+                        e.preventDefault();
+                        router.get(guests.links.next);
+                      }
+                    }}
+                  />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
-    </>
+    </AppLayout>
   );
 }

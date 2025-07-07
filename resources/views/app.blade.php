@@ -37,7 +37,7 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=roboto-condensed:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=roboto:400,500,600" rel="stylesheet" />
 
         @routes
         @viteReactRefresh
