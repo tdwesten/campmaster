@@ -58,3 +58,13 @@ test('tenant uses uuid as primary key', function () {
         ->and(strlen($tenant->id))->toBe(36)
         ->and(preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $tenant->id))->toBe(1);
 });
+
+test('tenant factory creates a valid tenant', function () {
+    $tenant = Tenant::factory()->create();
+
+    expect($tenant)->toBeInstanceOf(Tenant::class)
+        ->and($tenant->name)->toStartWith('Camping ')
+        ->and($tenant->domain)->not->toBeEmpty()
+        ->and($tenant->id)->toBeString()
+        ->and(strlen($tenant->id))->toBe(36);
+});
