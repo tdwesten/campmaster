@@ -237,6 +237,22 @@ Check TypeScript types:
 npm run types
 ```
 
+### Static Analysis
+The project uses PHPStan for static analysis of PHP code. PHPStan helps identify potential bugs and issues before they occur in production.
+
+Run PHPStan:
+```bash
+composer phpstan
+```
+
+PHPStan is configured with level 5 (medium strictness) and analyzes the following directories:
+- app
+- config
+- database
+- routes
+
+The configuration is stored in `phpstan.neon` in the project root.
+
 ### Frontend Architecture
 - React 19 with TypeScript
 - Inertia.js for connecting Laravel with React
