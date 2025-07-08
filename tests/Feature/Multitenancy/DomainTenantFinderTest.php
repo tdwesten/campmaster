@@ -13,11 +13,11 @@ it('can find a tenant by subdomain', function () {
     // Create a tenant
     $tenant = Tenant::create([
         'name' => 'Camping De Nachtegaal',
-        'domain' => 'campingdenachtegaal',
     ]);
 
+    // The domain is automatically generated as a slug from the name
     // Create a request with the tenant's subdomain
-    $request = Request::create('https://campingdenachtegaal.campmaster.nl');
+    $request = Request::create('https://camping-de-nachtegaal.campmaster.nl');
 
     // Use the DomainTenantFinder to find the tenant
     $finder = new DomainTenantFinder();
@@ -26,7 +26,7 @@ it('can find a tenant by subdomain', function () {
     // Assert that the correct tenant was found
     expect($foundTenant->id)->toBe($tenant->id);
     expect($foundTenant->name)->toBe('Camping De Nachtegaal');
-    expect($foundTenant->domain)->toBe('campingdenachtegaal');
+    expect($foundTenant->domain)->toBe('camping-de-nachtegaal');
 });
 
 it('returns null when no matching tenant is found', function () {
