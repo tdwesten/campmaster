@@ -1,10 +1,25 @@
 <?php
 
+use App\Models\Tenant;
 use App\Models\User;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
+beforeEach(function () {
+
+    $this->runLandlordMigrations();
+
+    // Create a tenant
+    $this->tenant = Tenant::factory()->create([
+        'name' => 'Camping De Nachtegaal',
+        'database' => 'tenant_camping_de_nachtegaal',
+    ]);
+
+    $this->tenant->makeCurrent();
+});
+
 test('login screen can be rendered', function () {
+
     $response = $this->get('/login');
 
     $response->assertStatus(200);

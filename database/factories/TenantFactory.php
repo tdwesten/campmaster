@@ -28,7 +28,6 @@ class TenantFactory extends Factory
 
         return [
             'name' => $name,
-            'database' => 'tenant_'.fake()->unique()->slug(2),
         ];
     }
 }

@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\Models\Concerns\ImplementsTenant;
+use Spatie\Multitenancy\Models\Concerns\UsesLandlordConnection;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -16,6 +18,7 @@ class Tenant extends Model implements IsTenant
     use HasSlug;
     use HasUuids;
     use ImplementsTenant;
+    use UsesLandlordConnection;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +27,6 @@ class Tenant extends Model implements IsTenant
      */
     protected $fillable = [
         'name',
-        'database',
     ];
 
     /**
@@ -36,5 +38,14 @@ class Tenant extends Model implements IsTenant
             ->generateSlugsFrom('name')
             ->saveSlugsTo('domain')
             ->preventOverwrite();
+    }
+
+    /**
+     * The users that belong to the tenant.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->withTimestamps();
     }
 }

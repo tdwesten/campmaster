@@ -5,7 +5,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return redirect('dashboard');
-});
+})->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', function () {
@@ -14,7 +14,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reservations', function () {
         return Inertia::render('reservations');
     });
-
 });
 
 require __DIR__.'/settings.php';

@@ -15,9 +15,7 @@ class TenantSeeder extends Seeder
         // Create Camping de nachtegaal tenant
         Tenant::create([
             'name' => 'Camping de nachtegaal',
-            'database' => 'tenant_camping_de_nachtegaal',
         ]);
 
-        $this->command->info('Tenant "Camping de nachtegaal" created successfully!');
     }
 }
