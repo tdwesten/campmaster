@@ -5,16 +5,16 @@ namespace App\Multitenancy;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Spatie\Multitenancy\Contracts\IsTenant;
 
-class DomainTenantFinder
+class DomainTenantFinder extends \Spatie\Multitenancy\TenantFinder\TenantFinder
 {
     /**
      * Find the tenant for the given request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \App\Models\Tenant|null
      */
-    public function findForRequest(Request $request): ?Tenant
+    public function findForRequest(Request $request): ?IsTenant
     {
         $host = $request->getHost();
         $baseDomain = Config::get('app.domain');
@@ -25,14 +25,14 @@ class DomainTenantFinder
         }
 
         // Check if the host contains the base domain
-        if (!str_contains($host, $baseDomain)) {
+        if (! str_contains($host, $baseDomain)) {
             return null;
         }
 
         // Extract the subdomain from the host
-        $subdomain = str_replace('.' . $baseDomain, '', $host);
+        $subdomain = str_replace('.'.$baseDomain, '', $host);
 
         // Find the tenant by domain
-        return Tenant::where('domain', $subdomain)->first();
+        return Tenant::whereDomain($subdomain)->first();
     }
 }

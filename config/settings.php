@@ -7,7 +7,7 @@ return [
      * put them (manually) here.
      */
     'settings' => [
-        App\Settings\TenantSettings::class,
+
     ],
 
     /*
@@ -28,7 +28,7 @@ return [
      * When no repository was set for a settings class the following repository
      * will be used for loading and saving settings.
      */
-    'default_repository' => 'tenant_database',
+    'default_repository' => 'database',
 
     /*
      * Settings will be stored and loaded from these repositories.
@@ -36,12 +36,6 @@ return [
     'repositories' => [
         'database' => [
             'type' => Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
-            'model' => null,
-            'table' => null,
-            'connection' => null,
-        ],
-        'tenant_database' => [
-            'type' => App\SettingsRepositories\TenantDatabaseSettingsRepository::class,
             'model' => null,
             'table' => null,
             'connection' => null,
@@ -80,7 +74,7 @@ return [
     'global_casts' => [
         DateTimeInterface::class => Spatie\LaravelSettings\SettingsCasts\DateTimeInterfaceCast::class,
         DateTimeZone::class => Spatie\LaravelSettings\SettingsCasts\DateTimeZoneCast::class,
-//        Spatie\DataTransferObject\DataTransferObject::class => Spatie\LaravelSettings\SettingsCasts\DtoCast::class,
+        //        Spatie\DataTransferObject\DataTransferObject::class => Spatie\LaravelSettings\SettingsCasts\DtoCast::class,
         Spatie\LaravelData\Data::class => Spatie\LaravelSettings\SettingsCasts\DataCast::class,
     ],
 

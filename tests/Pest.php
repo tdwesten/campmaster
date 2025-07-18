@@ -11,7 +11,10 @@
 |
 */
 
+use Tests\Traits\UsesLandlordMigrations;
+
 pest()->extend(Tests\TestCase::class)
+    ->use(UsesLandlordMigrations::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
 

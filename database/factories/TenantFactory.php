@@ -24,8 +24,11 @@ class TenantFactory extends Factory
      */
     public function definition(): array
     {
+        $name = 'Camping '.fake()->unique()->company();
+
         return [
-            'name' => 'Camping ' . fake()->unique()->company(),
+            'name' => $name,
+            'database' => 'tenant_'.fake()->unique()->slug(2),
         ];
     }
 }
