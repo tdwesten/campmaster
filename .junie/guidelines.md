@@ -285,14 +285,13 @@ use App\Models\Tenant;
 
 $tenant = Tenant::create([
     'name' => 'Camping De Nachtegaal',
-    'domain' => 'campingdenachtegaal', // Just the subdomain part
 ]);
 ```
 
 Or using the artisan command:
 
 ```bash
-php artisan tenants:create --name="Camping De Nachtegaal" --domain="campingdenachtegaal"
+php artisan tenants:create --name="Camping De Nachtegaal" 
 ```
 
 ### Accessing Tenant Information
@@ -300,7 +299,7 @@ php artisan tenants:create --name="Camping De Nachtegaal" --domain="campingdenac
 In your application code, you can access the current tenant:
 
 ```php
-$currentTenant = Spatie\Multitenancy\Models\Tenant::current();
+$currentTenant = Tenant::current();
 
 // Get the tenant's name
 $tenantName = $currentTenant->name;
@@ -318,83 +317,4 @@ The test suite includes tests for the multi-tenancy functionality:
 
 ```bash
 php artisan test tests/Feature/Multitenancy
-```
-
-## Settings Management
-
-The application uses Spatie's Laravel Settings package to manage configuration settings.
-
-### How It Works
-
-- Settings are defined as classes in the `app/Settings` directory
-- Each settings class extends `Spatie\LaravelSettings\Settings`
-- Settings are stored in the database and can be cached for performance
-- Settings are tenant-specific, with each tenant having its own set of settings
-
-### Tenant Settings
-
-The application includes a `TenantSettings` class that defines settings specific to each tenant:
-
-```php
-use App\Settings\TenantSettings;
-
-// Get the settings for the current tenant
-$settings = app(TenantSettings::class);
-
-// Access settings properties
-$siteName = $settings->site_name;
-$contactEmail = $settings->contact_email;
-$bookingEnabled = $settings->booking_enabled;
-
-// Update settings
-$settings->site_name = 'New Site Name';
-$settings->booking_enabled = false;
-$settings->save();
-```
-
-### Available Settings
-
-The `TenantSettings` class includes the following settings:
-
-- `site_name`: The name of the tenant's site
-- `contact_email`: Contact email (encrypted)
-- `phone_number`: Phone number (encrypted)
-- `address`: Physical address
-- `logo_path`: Path to the tenant's logo
-- `colors`: Array of color settings (primary, secondary, accent)
-- `booking_enabled`: Whether bookings are enabled
-- `max_guests_per_booking`: Maximum number of guests allowed per booking
-
-### How Tenant-Specific Settings Work
-
-The application uses a custom settings repository that extends Spatie's DatabaseSettingsRepository to make settings tenant-specific:
-
-1. The `TenantDatabaseSettingsRepository` class extends `DatabaseSettingsRepository` and adds tenant_id support
-2. The `tenant_id` column in the settings table associates settings with specific tenants
-3. The `TenantSettingsServiceProvider` sets the tenant ID in the repository based on the current tenant
-4. The `TenantSettings` class specifies 'tenant_database' as its repository
-
-This ensures that each tenant has its own set of settings, and settings for one tenant are not visible to other tenants.
-
-### Creating New Settings Classes
-
-To create a new settings class:
-
-1. Create a class in the `app/Settings` directory that extends `Spatie\LaravelSettings\Settings`
-2. Define properties for your settings
-3. Implement the `group()` method to define the settings group
-4. Optionally implement the `encrypted()` method to specify which properties should be encrypted
-5. Implement the `default()` method to define default values
-6. Implement the `repository()` method to return 'tenant_database' if the settings should be tenant-specific
-7. Register the class in `config/settings.php`
-8. Create a settings migration to initialize the settings
-
-```bash
-php artisan make:settings-migration CreateYourSettings
-```
-
-9. Run the migration
-
-```bash
-php artisan migrate --path=database/settings
 ```
