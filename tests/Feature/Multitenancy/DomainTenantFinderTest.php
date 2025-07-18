@@ -15,7 +15,6 @@ it('can find a tenant by subdomain', function () {
     // Create a tenant
     $tenant = Tenant::factory()->create([
         'name' => 'Camping De Nachtegaal',
-        'database' => 'tenant_camping_de_nachtegaal',
     ]);
 
     // The domain is automatically generated as a slug from the name

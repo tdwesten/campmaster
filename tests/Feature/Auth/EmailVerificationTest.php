@@ -1,11 +1,21 @@
 <?php
 
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
+beforeEach(function () {
+    // Create a tenant
+    $this->tenant = Tenant::factory()->create([
+        'name' => 'Camping De Nachtegaal',
+    ]);
+
+    $this->tenant->makeCurrent();
+});
 
 test('email verification screen can be rendered', function () {
     $user = User::factory()->unverified()->create();

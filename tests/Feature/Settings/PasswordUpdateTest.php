@@ -1,9 +1,19 @@
 <?php
 
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
+beforeEach(function () {
+    // Create a tenant
+    $this->tenant = Tenant::factory()->create([
+        'name' => 'Camping De Nachtegaal',
+    ]);
+
+    $this->tenant->makeCurrent();
+});
 
 test('password can be updated', function () {
     $user = User::factory()->create();
