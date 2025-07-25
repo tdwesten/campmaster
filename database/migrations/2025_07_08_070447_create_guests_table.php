@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email');
+            $table->foreignUuid('tenant_id');
 
             // European address fields
             $table->string('street')->nullable();

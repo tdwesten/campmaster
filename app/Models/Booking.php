@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BookingStatus;
+use App\Models\Traits\HasTenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,9 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
-    /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory;
-
+    use HasTenant;
     use HasUuids;
 
     /**
@@ -39,14 +39,6 @@ class Booking extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
-
-    /**
-     * Get the tenant that owns the booking.
-     */
-    public function tenant(): BelongsTo
-    {
-        return $this->belongsTo(Tenant::class);
-    }
 
     /**
      * Get the guest that owns the booking.

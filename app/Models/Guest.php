@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasTenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ class Guest extends Model
     /** @use HasFactory<\Database\Factories\GuestFactory> */
     use HasFactory;
 
+    use HasTenant;
     use HasUuids;
 
     /**
