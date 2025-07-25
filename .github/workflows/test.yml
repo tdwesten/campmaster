@@ -34,3 +34,6 @@ jobs:
 
       - name: Run Pest tests
         run: ./vendor/bin/pest
+
+      - name: Run Pest tests with coverage
+        run: ./vendor/bin/pest --coverage --min=80
