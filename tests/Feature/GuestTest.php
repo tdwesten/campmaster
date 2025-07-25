@@ -1,9 +1,15 @@
 <?php
 
 use App\Models\Guest;
+use App\Models\Tenant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->tenant = Tenant::factory()->create();
+    $this->tenant->makeCurrent();
+});
 
 test('guest can be created using factory', function () {
     $guest = Guest::factory()->create();

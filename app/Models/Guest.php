@@ -10,9 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Guest extends Model
 {
-    /** @use HasFactory<\Database\Factories\GuestFactory> */
     use HasFactory;
-
     use HasTenant;
     use HasUuids;
 
@@ -22,6 +20,7 @@ class Guest extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'tenant_id',
         'firstname',
         'lastname',
         'email',

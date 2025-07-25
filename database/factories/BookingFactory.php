@@ -3,12 +3,13 @@
 namespace Database\Factories;
 
 use App\Enums\BookingStatus;
+use App\Models\Booking;
 use App\Models\Guest;
 use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Booking>
+ * @extends Factory<Booking>
  */
 class BookingFactory extends Factory
 {
@@ -26,7 +27,7 @@ class BookingFactory extends Factory
         );
 
         return [
-            'tenant_id' => Tenant::factory(),
+            'tenant_id' => Tenant::current() ?? Tenant::factory(),
             'guest_id' => Guest::factory(),
             'status' => fake()->randomElement(BookingStatus::cases()),
             'start_date' => $startDate,

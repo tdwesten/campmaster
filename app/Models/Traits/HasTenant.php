@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Exceptions\TenantIdNotFillableException;
 use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,15 +14,30 @@ trait HasTenant
      * Boot the trait.
      *
      * This method is automatically called when the trait is used.
+     *
+     * @throws TenantIdNotFillableException
      */
     public static function bootHasTenant(): void
     {
-        // If you want to automatically scope all queries to the current tenant,
-        // you can uncomment the following code:
+        static::addGlobalScope('tenant', function (Builder $builder) {
+            $builder->tenant();
+        });
 
-        // static::addGlobalScope('tenant', function (Builder $builder) {
-        //     $builder->tenant();
-        // });
+        static::creating(function ($model) {
+
+            if (! in_array('tenant_id', $model->getFillable())) {
+                throw new \App\Exceptions\TenantIdNotFillableException(get_class($model));
+            }
+
+            if (Tenant::current() === null) {
+                throw new \Exception('No current tenant');
+            }
+
+            if ($model->tenant_id === null) {
+                $model->tenant_id = Tenant::current()->id;
+            }
+        });
+
     }
 
     /**
