@@ -21,6 +21,7 @@ class Booking extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'id',
         'tenant_id',
         'guest_id',
         'status',

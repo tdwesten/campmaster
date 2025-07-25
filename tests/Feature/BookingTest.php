@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Booking\Actions\CreateBookingAction;
 use App\Enums\BookingStatus;
 use App\Models\Booking;
 use App\Models\Guest;
@@ -16,16 +17,19 @@ beforeEach(function () {
 test('can create booking', function () {
     $guest = Guest::factory()->create();
 
-    $booking = Booking::create([
-        'guest_id' => $guest->id,
-        'status' => BookingStatus::Pending,
-        'start_date' => '2025-08-01',
-        'end_date' => '2025-08-07',
-        'notes' => 'Test booking',
-    ]);
+    // Create booking using the event sourcing action
+    $bookingUuid = (new CreateBookingAction)->execute(
+        guestUuid: $guest->id,
+        startDate: '2025-08-01',
+        endDate: '2025-08-07',
+        notes: 'Test booking'
+    );
 
-    // Use assertModelExists instead of assertDatabaseHas to avoid date format issues
-    $this->assertModelExists($booking);
+    // Retrieve the booking from the database
+    $booking = Booking::find($bookingUuid);
+
+    // Verify the booking exists
+    $this->assertNotNull($booking);
 
     // Verify individual fields
     expect($booking->tenant_id)->toBe($this->tenant->id)
@@ -37,7 +41,16 @@ test('can create booking', function () {
 });
 
 test('booking belongs to tenant and guest', function () {
-    $booking = Booking::factory()->create();
+    $guest = Guest::factory()->create();
+
+    // Create booking using the event sourcing action
+    $bookingUuid = (new CreateBookingAction)->execute(
+        guestUuid: $guest->id,
+        startDate: '2025-08-01',
+        endDate: '2025-08-07'
+    );
+
+    $booking = Booking::find($bookingUuid);
 
     expect($booking->tenant)->toBeInstanceOf(Tenant::class)
         ->and($booking->tenant->id)->toBe($this->tenant->id)
@@ -45,8 +58,17 @@ test('booking belongs to tenant and guest', function () {
 });
 
 test('tenant has many bookings', function () {
+    $guest = Guest::factory()->create();
 
-    Booking::factory()->count(3)->create(['tenant_id' => $this->tenant->id]);
+    // Create multiple bookings using the event sourcing action
+    for ($i = 0; $i < 3; $i++) {
+        (new CreateBookingAction)->execute(
+            guestUuid: $guest->id,
+            startDate: '2025-08-01',
+            endDate: '2025-08-07',
+            tenantUuid: $this->tenant->id
+        );
+    }
 
     expect($this->tenant->bookings)->toHaveCount(3);
 });
@@ -54,7 +76,14 @@ test('tenant has many bookings', function () {
 test('guest has many bookings', function () {
     $guest = Guest::factory()->create();
 
-    Booking::factory()->count(2)->create(['guest_id' => $guest->id]);
+    // Create multiple bookings using the event sourcing action
+    for ($i = 0; $i < 2; $i++) {
+        (new CreateBookingAction)->execute(
+            guestUuid: $guest->id,
+            startDate: '2025-08-01',
+            endDate: '2025-08-07'
+        );
+    }
 
     expect($guest->bookings)->toHaveCount(2);
 });
