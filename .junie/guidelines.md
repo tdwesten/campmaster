@@ -3,7 +3,7 @@
 ## Purpose and Overview
 
 - Professional and efficient campsite management application
-- Handles reservations, places, guests, payments, reports etc.
+- Handles index, places, guests, payments, reports etc.
 
 ## Event Sourcing Implementation
 
@@ -55,7 +55,7 @@
     - Bed linen
     - Extra guests
     - Pets
-- `booking_items` table links extras to reservations
+- `booking_items` table links extras to index
 - Flexible model requires no changes for new products/services
 
 ### Tourist Tax Handling
@@ -94,7 +94,7 @@ This document provides essential information for developers working on the Campm
 ### Laravel specifics
 - Uses Laravel 12 with Inertia.js for server-side rendering
 - Multi-tenancy implemented using a tenants table and subdomain routing
-- Event sourcing for reservations and bookings
+- Event sourcing for index and bookings
 - Use UUID for unique identifiers
 - Database migrations for schema management
 - Use Action pattern for business logic

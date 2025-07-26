@@ -14,15 +14,15 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Reservations',
-        href: '/reservations',
+        title: 'Bookings',
+        href: '/bookings',
         icon: CalendarCheck,
     },
     {
         title: 'Guests',
         href: '/guests',
         icon: Users,
-    }
+    },
 ];
 
 const footerNavItems: NavItem[] = [

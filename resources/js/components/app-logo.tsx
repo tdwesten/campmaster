@@ -7,7 +7,7 @@ export default function AppLogo() {
                 <AppLogoIcon className="size-6 fill-current text-white dark:text-black" />
             </div>
             <div className="ml-1 grid flex-1 text-left">
-                <span className="mb-0.5 truncate leading-none font-semibold text-primary">Campmaster</span>
+                <span className="text-primary mb-0.5 truncate leading-none font-semibold">Campmaster</span>
             </div>
         </>
     );

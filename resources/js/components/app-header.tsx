@@ -23,14 +23,14 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Reservations',
-        href: '/reservations',
+        href: '/index',
         icon: CalendarCheck,
     },
     {
         title: 'Guests',
         href: '/guests',
         icon: Users,
-    }
+    },
 ];
 
 const rightNavItems: NavItem[] = [
@@ -71,7 +71,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                             <SheetContent side="left" className="bg-sidebar flex h-full w-64 flex-col items-stretch justify-between">
                                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                                 <SheetHeader className="flex justify-start text-left">
-                                    <AppLogoIcon className="h-8 w-8 fill-current text-primary dark:text-white" />
+                                    <AppLogoIcon className="text-primary h-8 w-8 fill-current dark:text-white" />
                                 </SheetHeader>
                                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
                                     <div className="flex h-full flex-col justify-between">
