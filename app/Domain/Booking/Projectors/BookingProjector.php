@@ -5,6 +5,7 @@ namespace App\Domain\Booking\Projectors;
 use App\Domain\Booking\Events\BookingCancelled;
 use App\Domain\Booking\Events\BookingCreated;
 use App\Domain\Booking\Events\BookingDatesChanged;
+use App\Domain\Booking\Events\BookingSiteSelected;
 use App\Domain\Booking\Events\BookingUpdated;
 use App\Domain\Booking\Events\PaymentReceived;
 use App\Enums\BookingStatus;
@@ -89,6 +90,14 @@ class BookingProjector extends Projector
             'notes' => $event->notes,
             'created_at' => now(),
             'updated_at' => now(),
+        ]);
+    }
+
+    public function onBookingSiteSelected(BookingSiteSelected $event): void
+    {
+        $booking = Booking::findOrFail($event->bookingUuid);
+        $booking->update([
+            'site_id' => $event->siteUuid,
         ]);
     }
 }

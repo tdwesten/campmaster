@@ -24,6 +24,7 @@ class Booking extends Model
         'id',
         'tenant_id',
         'guest_id',
+        'site_id',
         'status',
         'start_date',
         'end_date',
@@ -47,5 +48,13 @@ class Booking extends Model
     public function guest(): BelongsTo
     {
         return $this->belongsTo(Guest::class);
+    }
+
+    /**
+     * Get the site that the booking is for.
+     */
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class);
     }
 }

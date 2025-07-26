@@ -5,9 +5,11 @@ namespace App\Domain\Booking\Aggregates;
 use App\Domain\Booking\Events\BookingCancelled;
 use App\Domain\Booking\Events\BookingCreated;
 use App\Domain\Booking\Events\BookingDatesChanged;
+use App\Domain\Booking\Events\BookingSiteSelected;
 use App\Domain\Booking\Events\BookingUpdated;
 use App\Domain\Booking\Events\PaymentReceived;
 use App\Enums\BookingStatus;
+use Exception;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class BookingAggregateRoot extends AggregateRoot
@@ -19,6 +21,8 @@ class BookingAggregateRoot extends AggregateRoot
     private ?string $endDate = null;
 
     private float $totalPaid = 0;
+
+    private ?string $siteUuid = null;
 
     public function createBooking(
         string $tenantUuid,
@@ -43,7 +47,7 @@ class BookingAggregateRoot extends AggregateRoot
     public function updateBooking(?BookingStatus $status = null, ?string $notes = null): self
     {
         if ($this->status === BookingStatus::Cancelled) {
-            throw new \Exception('Cannot update a cancelled booking');
+            throw new Exception('Cannot update a cancelled booking');
         }
 
         $this->recordThat(new BookingUpdated(
@@ -58,7 +62,7 @@ class BookingAggregateRoot extends AggregateRoot
     public function cancelBooking(?string $reason = null): self
     {
         if ($this->status === BookingStatus::Cancelled) {
-            throw new \Exception('Booking is already cancelled');
+            throw new Exception('Booking is already cancelled');
         }
 
         $this->recordThat(new BookingCancelled(
@@ -72,11 +76,11 @@ class BookingAggregateRoot extends AggregateRoot
     public function changeDates(string $startDate, string $endDate): self
     {
         if ($this->status === BookingStatus::Cancelled) {
-            throw new \Exception('Cannot change dates of a cancelled booking');
+            throw new Exception('Cannot change dates of a cancelled booking');
         }
 
         if ($this->status === BookingStatus::Completed) {
-            throw new \Exception('Cannot change dates of a completed booking');
+            throw new Exception('Cannot change dates of a completed booking');
         }
 
         $this->recordThat(new BookingDatesChanged(
@@ -95,7 +99,7 @@ class BookingAggregateRoot extends AggregateRoot
         ?string $notes = null
     ): self {
         if ($this->status === BookingStatus::Cancelled) {
-            throw new \Exception('Cannot receive payment for a cancelled booking');
+            throw new Exception('Cannot receive payment for a cancelled booking');
         }
 
         $this->recordThat(new PaymentReceived(
@@ -104,6 +108,24 @@ class BookingAggregateRoot extends AggregateRoot
             paymentMethod: $paymentMethod,
             reference: $reference,
             notes: $notes,
+        ));
+
+        return $this;
+    }
+
+    public function selectSite(?string $siteUuid): self
+    {
+        if ($this->status === BookingStatus::Cancelled) {
+            throw new Exception('Cannot select site for a cancelled booking');
+        }
+
+        if ($this->status === BookingStatus::Completed) {
+            throw new Exception('Cannot select site for a completed booking');
+        }
+
+        $this->recordThat(new BookingSiteSelected(
+            bookingUuid: $this->uuid(),
+            siteUuid: $siteUuid,
         ));
 
         return $this;
@@ -142,5 +164,10 @@ class BookingAggregateRoot extends AggregateRoot
         if ($this->status === BookingStatus::Pending) {
             $this->status = BookingStatus::Confirmed;
         }
+    }
+
+    protected function applyBookingSiteSelected(BookingSiteSelected $event): void
+    {
+        $this->siteUuid = $event->siteUuid;
     }
 }
