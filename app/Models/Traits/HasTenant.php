@@ -4,7 +4,6 @@ namespace App\Models\Traits;
 
 use App\Exceptions\TenantIdNotFillableException;
 use App\Models\Tenant;
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -25,19 +24,15 @@ trait HasTenant
         });
 
         static::creating(function ($model) {
-
+            // Ensure models using HasTenant declare tenant_id as fillable
             if (! in_array('tenant_id', $model->getFillable())) {
                 throw new TenantIdNotFillableException(get_class($model));
-            } else {
-                return;
             }
 
-            if (Tenant::current() === null) {
-                throw new Exception('No current tenant');
-            }
-
-            if ($model->tenant_id === null) {
-                $model->tenant_id = Tenant::current()->id;
+            // If there is a current tenant and tenant_id is not set explicitly, set it
+            $currentTenant = Tenant::current();
+            if ($currentTenant !== null && $model->tenant_id === null) {
+                $model->tenant_id = $currentTenant->id;
             }
         });
 
