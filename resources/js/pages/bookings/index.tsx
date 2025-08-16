@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/react';
 export default function index({}) {
     const breadcrumbs = [
         {
-            title: 'Bookings',
+            title: 'bookings',
             href: '/bookings',
         },
     ];

@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import laravel from 'laravel-vite-plugin';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
+import { run } from 'vite-plugin-run';
 
 export default defineConfig({
     plugins: [
@@ -13,6 +14,18 @@ export default defineConfig({
         }),
         react(),
         tailwindcss(),
+        run([
+            {
+                name: 'generate translations',
+                run: ['php', 'artisan', 'lingua:generate'],
+                pattern: ['resources/lang/**', 'lang/**'],
+            },
+            {
+                name: 'generate ziggy',
+                run: ['php', 'artisan', 'ziggy:generate'],
+                pattern: ['routes/**'],
+            },
+        ]),
     ],
     esbuild: {
         jsx: 'automatic',

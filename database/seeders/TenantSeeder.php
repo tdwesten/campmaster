@@ -13,8 +13,16 @@ class TenantSeeder extends Seeder
     public function run(): void
     {
         // Create Camping de nachtegaal tenant
-        Tenant::create([
+        $tenant = Tenant::create([
             'name' => 'Camping de nachtegaal',
+        ]);
+
+        $tenant->makeCurrent();
+
+        $tenant->users()->create([
+            'name' => 'Admin',
+            'email' => 'post@thomasvanderwesten.nl',
+            'password' => bcrypt('password'),
         ]);
 
     }
