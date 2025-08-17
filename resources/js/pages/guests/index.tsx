@@ -1,15 +1,8 @@
 import { AppArchive } from '@/components/app-archive';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
-
-interface GuestItem {
-    id: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    city: string | null;
-    created_at: string | null;
-}
+import DataTable from '@/components/data-table/data-table';
+import { guestColumns, type GuestItem } from './columns';
 
 interface PaginationLink {
     url: string | null;
@@ -39,7 +32,9 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
     ];
 
     function go(url: string | null) {
-        if (!url) return;
+        if (!url) {
+            return;
+        }
         router.get(url, {}, { preserveScroll: true, preserveState: true });
     }
 
@@ -48,37 +43,13 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
             <Head title="Guests" />
 
             <AppArchive title="Guests" subtitle="Browse and manage your guests">
-                <div className="overflow-hidden rounded-xl border border-gray-200">
-                    <table className="w-full table-auto">
-                        <thead className="bg-gray-50">
-                            <tr className="text-left text-sm text-gray-600">
-                                <th className="px-4 py-3">Name</th>
-                                <th className="px-4 py-3">Email</th>
-                                <th className="px-4 py-3">City</th>
-                                <th className="px-4 py-3">Added</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {guests.data.length === 0 && (
-                                <tr>
-                                    <td className="px-4 py-6 text-center text-sm text-gray-500" colSpan={4}>
-                                        No guests found.
-                                    </td>
-                                </tr>
-                            )}
-                            {guests.data.map((g) => (
-                                <tr key={g.id} className="border-t text-sm">
-                                    <td className="px-4 py-3 font-medium">
-                                        {g.firstname} {g.lastname}
-                                    </td>
-                                    <td className="px-4 py-3">{g.email}</td>
-                                    <td className="px-4 py-3">{g.city ?? '-'}</td>
-                                    <td className="px-4 py-3">{g.created_at ? new Date(g.created_at).toLocaleString() : '-'}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <DataTable<GuestItem, unknown>
+                    columns={guestColumns}
+                    data={guests.data}
+                    searchKeys={['firstname', 'lastname', 'email']}
+                    placeholder="Search guests..."
+                    className="overflow-hidden rounded-xl border border-gray-200"
+                />
 
                 <div className="mt-4 flex items-center justify-between text-sm">
                     <div className="text-gray-600">
