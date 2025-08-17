@@ -12,3 +12,5 @@ const { trans } = useLingua();
 
 const text = trans('welcome.message');
 ```
+
+The translations will be automatically available in Typescript. No need to pass the translations with inertia/php to the frontend.
