@@ -26,7 +26,7 @@ export interface DataTableProps<TData, TValue> {
     showSearch?: boolean;
 }
 
-export function DataTable<TData, TValue>({
+export default function DataTable<TData, TValue>({
     columns,
     data,
     searchKeys,
