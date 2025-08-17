@@ -1,9 +1,10 @@
 import { AppArchive } from '@/components/app-archive';
 import DataTable from '@/components/data-table/data-table';
 import AppLayout from '@/layouts/app-layout';
+import Paginator from '@/components/paginator';
+import useLingua from '@cyberwolf.studio/lingua-react';
 import { Head, router } from '@inertiajs/react';
 import { guestColumns, type GuestItem } from './columns';
-import useLingua from '@cyberwolf.studio/lingua-react';
 
 interface PaginationLink {
     url: string | null;
@@ -56,29 +57,15 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
                     className="overflow-hidden border-gray-200"
                 />
 
-                <div className="mt-4 flex items-center justify-between text-sm">
-                    <div className="text-gray-600">
-                        {trans('messages.pagination.page')} {guests.current_page} {trans('messages.pagination.of')} {guests.last_page} · {guests.total} {trans('messages.pagination.total')}
-                    </div>
-                    <div className="flex gap-2">
-                        <button
-                            type="button"
-                            className="rounded-md border px-3 py-1 disabled:opacity-50"
-                            onClick={() => go(guests.prev_page_url)}
-                            disabled={!guests.prev_page_url}
-                        >
-                            {trans('messages.pagination.previous')}
-                        </button>
-                        <button
-                            type="button"
-                            className="rounded-md border px-3 py-1 disabled:opacity-50"
-                            onClick={() => go(guests.next_page_url)}
-                            disabled={!guests.next_page_url}
-                        >
-                            {trans('messages.pagination.next')}
-                        </button>
-                    </div>
-                </div>
+                <Paginator
+                    currentPage={guests.current_page}
+                    lastPage={guests.last_page}
+                    total={guests.total}
+                    prevUrl={guests.prev_page_url}
+                    nextUrl={guests.next_page_url}
+                    links={guests.links}
+                    onNavigate={go}
+                />
             </AppArchive>
         </AppLayout>
     );

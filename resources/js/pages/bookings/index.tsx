@@ -1,8 +1,11 @@
 import { AppArchive } from '@/components/app-archive';
 import AppLayout from '@/layouts/app-layout';
+import { useLingua } from '@cyberwolf.studio/lingua-react';
 import { Head } from '@inertiajs/react';
 
 export default function index({}) {
+    const { trans, locale } = useLingua();
+
     const breadcrumbs = [
         {
             title: 'bookings',
