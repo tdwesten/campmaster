@@ -1,7 +1,7 @@
 import { AppArchive } from '@/components/app-archive';
 import DataTable from '@/components/data-table/data-table';
-import AppLayout from '@/layouts/app-layout';
 import Paginator from '@/components/paginator';
+import AppLayout from '@/layouts/app-layout';
 import useLingua from '@cyberwolf.studio/lingua-react';
 import { Head, router } from '@inertiajs/react';
 import { guestColumns, type GuestItem } from './columns';
@@ -54,7 +54,6 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
                     data={guests.data}
                     searchKeys={['firstname', 'lastname', 'email']}
                     placeholder={trans('messages.guests.search_placeholder')}
-                    className="overflow-hidden border-gray-200"
                 />
 
                 <Paginator

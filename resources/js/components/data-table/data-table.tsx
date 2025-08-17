@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import useLingua from '@cyberwolf.studio/lingua-react';
 import {
     ColumnDef,
     flexRender,
@@ -14,7 +15,6 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDown } from 'lucide-react';
 import * as React from 'react';
-import useLingua from '@cyberwolf.studio/lingua-react';
 
 export interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -22,9 +22,19 @@ export interface DataTableProps<TData, TValue> {
     searchKeys?: (keyof TData)[]; // which fields to quick search against
     placeholder?: string;
     className?: string;
+    showColumnSelector?: boolean;
+    showSearch?: boolean;
 }
 
-export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholder, className }: DataTableProps<TData, TValue>): React.ReactElement {
+export function DataTable<TData, TValue>({
+    columns,
+    data,
+    searchKeys,
+    placeholder,
+    className,
+    showColumnSelector = false,
+    showSearch = false,
+}: DataTableProps<TData, TValue>): React.ReactElement {
     const { trans } = useLingua();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -58,7 +68,7 @@ export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholde
     return (
         <div className={className}>
             <div className="flex items-center gap-2 py-2">
-                {searchKeys && searchKeys.length > 0 && (
+                {showSearch && searchKeys && searchKeys.length > 0 && (
                     <Input
                         placeholder={placeholder ?? trans('messages.datatable.search_placeholder')}
                         value={globalFilter}
@@ -66,30 +76,32 @@ export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholde
                         className="max-w-xs"
                     />
                 )}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="ml-auto">
-                            {trans('messages.datatable.columns')} <ChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllLeafColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                );
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                {showColumnSelector && (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" className="ml-auto">
+                                {trans('messages.datatable.columns')} <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {table
+                                .getAllLeafColumns()
+                                .filter((column) => column.getCanHide())
+                                .map((column) => {
+                                    return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className="capitalize"
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                        >
+                                            {column.id}
+                                        </DropdownMenuCheckboxItem>
+                                    );
+                                })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -128,5 +140,3 @@ export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholde
         </div>
     );
 }
-
-export default DataTable;
