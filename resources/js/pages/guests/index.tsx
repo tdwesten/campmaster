@@ -1,8 +1,9 @@
 import { AppArchive } from '@/components/app-archive';
+import DataTable from '@/components/data-table/data-table';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router } from '@inertiajs/react';
-import DataTable from '@/components/data-table/data-table';
 import { guestColumns, type GuestItem } from './columns';
+import useLingua from '@cyberwolf.studio/lingua-react';
 
 interface PaginationLink {
     url: string | null;
@@ -24,12 +25,16 @@ interface GuestsPageProps {
 }
 
 export default function GuestsIndex({ guests }: GuestsPageProps) {
+    const { trans } = useLingua();
+
     const breadcrumbs = [
         {
-            title: 'guests',
+            title: trans('messages.guests.breadcrumb'),
             href: '/guests',
         },
     ];
+
+    const columns = guestColumns(trans);
 
     function go(url: string | null) {
         if (!url) {
@@ -40,20 +45,20 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Guests" />
+            <Head title={trans('messages.guests.title')} />
 
-            <AppArchive title="Guests" subtitle="Browse and manage your guests">
+            <AppArchive title={trans('messages.guests.title')} subtitle={trans('messages.guests.subtitle')}>
                 <DataTable<GuestItem, unknown>
-                    columns={guestColumns}
+                    columns={columns}
                     data={guests.data}
                     searchKeys={['firstname', 'lastname', 'email']}
-                    placeholder="Search guests..."
-                    className="overflow-hidden rounded-xl border border-gray-200"
+                    placeholder={trans('messages.guests.search_placeholder')}
+                    className="overflow-hidden border-gray-200"
                 />
 
                 <div className="mt-4 flex items-center justify-between text-sm">
                     <div className="text-gray-600">
-                        Page {guests.current_page} of {guests.last_page} · {guests.total} total
+                        {trans('messages.pagination.page')} {guests.current_page} {trans('messages.pagination.of')} {guests.last_page} · {guests.total} {trans('messages.pagination.total')}
                     </div>
                     <div className="flex gap-2">
                         <button
@@ -62,7 +67,7 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
                             onClick={() => go(guests.prev_page_url)}
                             disabled={!guests.prev_page_url}
                         >
-                            Previous
+                            {trans('messages.pagination.previous')}
                         </button>
                         <button
                             type="button"
@@ -70,7 +75,7 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
                             onClick={() => go(guests.next_page_url)}
                             disabled={!guests.next_page_url}
                         >
-                            Next
+                            {trans('messages.pagination.next')}
                         </button>
                     </div>
                 </div>

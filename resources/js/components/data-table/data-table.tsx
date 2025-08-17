@@ -14,6 +14,7 @@ import {
 } from '@tanstack/react-table';
 import { ChevronDown } from 'lucide-react';
 import * as React from 'react';
+import useLingua from '@cyberwolf.studio/lingua-react';
 
 export interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -24,6 +25,7 @@ export interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholder, className }: DataTableProps<TData, TValue>): React.ReactElement {
+    const { trans } = useLingua();
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [globalFilter, setGlobalFilter] = React.useState<string>('');
@@ -58,7 +60,7 @@ export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholde
             <div className="flex items-center gap-2 py-2">
                 {searchKeys && searchKeys.length > 0 && (
                     <Input
-                        placeholder={placeholder ?? 'Search...'}
+                        placeholder={placeholder ?? trans('messages.datatable.search_placeholder')}
                         value={globalFilter}
                         onChange={(e) => setGlobalFilter(e.target.value)}
                         className="max-w-xs"
@@ -67,7 +69,7 @@ export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholde
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="sm" className="ml-auto">
-                            Columns <ChevronDown className="ml-2 h-4 w-4" />
+                            {trans('messages.datatable.columns')} <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -116,7 +118,7 @@ export function DataTable<TData, TValue>({ columns, data, searchKeys, placeholde
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                    {trans('messages.datatable.no_results')}
                                 </TableCell>
                             </TableRow>
                         )}

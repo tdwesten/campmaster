@@ -2,7 +2,7 @@ import { useLingua } from '@cyberwolf.studio/lingua-react';
 import AppLogoIcon from './app-logo-icon';
 
 export default function AppLogo() {
-    const { trans, transChoice, locale } = useLingua();
+    const { trans, locale } = useLingua();
     console.log('AppLogo rendered with locale:', locale);
     return (
         <>
