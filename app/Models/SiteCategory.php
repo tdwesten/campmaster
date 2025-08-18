@@ -6,12 +6,14 @@ use App\Models\Traits\HasTenant;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
-class Site extends Model
+class SiteCategory extends Model
 {
     use HasFactory;
+    use HasSlug;
     use HasTenant;
     use HasUuids;
 
@@ -23,24 +25,27 @@ class Site extends Model
     protected $fillable = [
         'id',
         'tenant_id',
-        'site_category_id',
         'name',
+        'slug',
         'description',
     ];
 
     /**
-     * Get the bookings for the site.
+     * Get the options for generating the slug.
      */
-    public function bookings(): HasMany
+    public function getSlugOptions(): SlugOptions
     {
-        return $this->hasMany(Booking::class);
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->preventOverwrite();
     }
 
     /**
-     * Get the category this site belongs to.
+     * Get the sites that belong to this category.
      */
-    public function siteCategory(): BelongsTo
+    public function sites(): HasMany
     {
-        return $this->belongsTo(SiteCategory::class);
+        return $this->hasMany(Site::class);
     }
 }
