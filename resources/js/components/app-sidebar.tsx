@@ -5,24 +5,37 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { type NavItem } from '@/types';
 import useLingua from '@cyberwolf.studio/lingua-react';
 import { Link } from '@inertiajs/react';
-import { BookOpen, CalendarCheck, CogIcon, LayoutGrid, Users } from 'lucide-react';
+import { BookOpen, CalendarCheck, CogIcon, LayoutGrid, TagIcon, TentIcon, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 let mainNavItems: NavItem[] = [
     {
         title: 'messages.sidebar.dashboard',
-        href: '/',
+        href: route('dashboard'),
         icon: LayoutGrid,
     },
     {
         title: 'messages.sidebar.reservations',
-        href: '/bookings',
+        href: route('bookings.index'),
         icon: CalendarCheck,
     },
     {
         title: 'messages.sidebar.guests',
-        href: '/guests',
+        href: route('guests.index'),
         icon: Users,
+    },
+];
+
+let configurationNavMenuItems: NavItem[] = [
+    {
+        title: 'messages.sidebar.sites',
+        href: route('sites.index'),
+        icon: TentIcon,
+    },
+    {
+        title: 'messages.sidebar.site_categories',
+        href: route('site-categories.index'),
+        icon: TagIcon,
     },
 ];
 
@@ -42,12 +55,12 @@ const footerNavItems: NavItem[] = [
 export function AppSidebar() {
     const { trans } = useLingua();
 
-    mainNavItems = mainNavItems.map((item) => {
-        return {
+    [mainNavItems, configurationNavMenuItems] = [mainNavItems, configurationNavMenuItems].map((items) =>
+        items.map((item) => ({
             ...item,
             title: trans(item.title),
-        };
-    });
+        })),
+    );
 
     return (
         <Sidebar collapsible="icon" variant="sidebar" className="w-64">
@@ -64,7 +77,8 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems} title={trans('messages.sidebar.main')} />
+                <NavMain items={configurationNavMenuItems} title={trans('messages.sidebar.configuration')} />
             </SidebarContent>
 
             <SidebarFooter>

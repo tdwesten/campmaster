@@ -16,4 +16,5 @@ Route::middleware('auth')->group(function () {
     Route::put('settings/password', [PasswordController::class, 'update'])->name('password.update');
 
     Route::get('settings/appearance', [AppearanceController::class, 'index'])->name('appearance');
+    Route::post('settings/appearance/locale', [AppearanceController::class, 'updateLocale'])->name('appearance.locale');
 });

@@ -4,6 +4,8 @@ use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SiteCategoriesController;
+use App\Http\Controllers\SitesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -14,6 +16,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('bookings', BookingsController::class)->only(['index']);
 
     Route::resource('guests', GuestsController::class)->only([
+        'index', 'create', 'store', 'edit', 'update',
+    ]);
+
+    Route::resource('sites', SitesController::class)->only([
+        'index', 'create', 'store', 'edit', 'update',
+    ]);
+
+    Route::resource('site-categories', SiteCategoriesController::class)->only([
         'index', 'create', 'store', 'edit', 'update',
     ]);
 });

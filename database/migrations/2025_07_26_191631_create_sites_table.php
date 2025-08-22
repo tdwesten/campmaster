@@ -22,6 +22,11 @@ return new class extends Migration
                 ->references('id')
                 ->on('tenants')
                 ->onDelete('cascade');
+
+            $table->foreignUuid('site_category_id')
+                ->nullable()
+                ->constrained('site_categories')
+                ->nullOnDelete();
         });
     }
 
