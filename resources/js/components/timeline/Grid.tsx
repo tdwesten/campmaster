@@ -21,6 +21,17 @@ export function Grid({ viewMode, resources, range, cellWidth, rowHeight, onCellC
     const totalWidth = cols.length * cellWidth;
     const totalHeight = resources.length * rowHeight;
 
+    // Compute category (group) boundaries to draw full-width separators
+    const groupBoundaries: number[] = [];
+    let prevGroup: string | undefined = resources[0] ? (resources[0].groupId ?? 'default') : undefined;
+    resources.forEach((r, idx) => {
+        const g = r.groupId ?? 'default';
+        if (idx > 0 && g !== prevGroup) {
+            groupBoundaries.push(idx);
+        }
+        prevGroup = g;
+    });
+
     return (
         <div className="relative" style={{ width: totalWidth, height: totalHeight }}>
             {/* Columns */}
@@ -38,6 +49,11 @@ export function Grid({ viewMode, resources, range, cellWidth, rowHeight, onCellC
             {/* Row separators */}
             {resources.map((r, idx) => (
                 <div key={r.id} className="absolute right-0 left-0 border-b border-slate-200/70" style={{ top: (idx + 1) * rowHeight - 1 }} />
+            ))}
+
+            {/* Category separators across full width */}
+            {groupBoundaries.map((idx) => (
+                <div key={`group-sep-${idx}`} className="absolute right-0 left-0 border-t-2 border-slate-300" style={{ top: idx * rowHeight - 1 }} />
             ))}
 
             {/* Interactive cells */}

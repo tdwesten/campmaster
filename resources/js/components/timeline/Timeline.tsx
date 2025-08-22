@@ -72,7 +72,7 @@ export default function Timeline({ resources, bookings, anchorDate, defaultView 
     const totalHeight = resources.length * config.rowHeight;
 
     return (
-        <div className="w-full">
+        <div className="h-screen w-full" data-component="Timeline">
             {/* Toolbar */}
             <Toolbar
                 anchorDate={currentAnchor}

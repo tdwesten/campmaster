@@ -26,20 +26,7 @@
     - `domain`: Subdomain for the tenant (e.g. `campingdenachtegaal`), automatically generated as a slug from the name and cannot be overwritten
     - `created_at`, `updated_at`: Timestamps
 
-### Accommodations
-
-- Generic `accommodations` tabl
-    - Contains all rental units
-    - Includes common fields like name, description, capacity, etc.
-- Supports different accommodation types:
-    - Camping places
-    - Tents
-    - Cottages
-    - Lodges
-- Flexibly expandable with new types
-
 ### Bookings and Guests
-
 - `bookings` table contains main reservation data:
     - Guest details
     - Period
@@ -48,7 +35,6 @@
 
 
 ### Extra Costs and Options
-
 - `products` table for all possible extras:
     - Electricity
     - Campfire wood
@@ -59,7 +45,6 @@
 - Flexible model requires no changes for new products/services
 
 ### Tourist Tax Handling
-
 - Separate table for tourist tax rates by:
     - Campsite/municipality
     - Validity dates
@@ -67,14 +52,12 @@
 - Added to reservation as regular booking item
 
 ## Key Advantages
-
 - Flexible, scalable and future-proof architecture
 - Simplified reporting and invoicing
 - Complete audit trail via event sourcing
 # Development Guidelines for Campmaster Frontend
 
 This document provides essential information for developers working on the Campmaster project.
-
 
 ## Build & Configuration
 
@@ -90,6 +73,18 @@ This document provides essential information for developers working on the Campm
 - Shadcn UI
 - Vite
 - Pest PHP for testing
+
+### React and Inertia.js
+
+- Uses React 19 with TypeScript for the frontend
+- Inertia.js connects Laravel with React for server-side rendering
+- Shadcn UI provides reusable components
+- Tailwind CSS for styling, with utility classes for responsive design
+- Vite for building and bundling assets
+- Uses `cn` utility for conditional class names
+- Supports server-side rendering (SSR) with Inertia.js
+- Uses `@inertiajs/react` for Inertia integration
+- Add `data-component="ComponentName"` to root elements for Inertia component identification
 
 ### Laravel specifics
 - Uses Laravel 12 with Inertia.js for server-side rendering

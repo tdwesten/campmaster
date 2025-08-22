@@ -6,13 +6,11 @@ import {
     addWeeks,
     differenceInCalendarDays,
     eachDayOfInterval,
-    endOfMonth,
     endOfQuarter,
     format,
     isAfter,
     isBefore,
     isWithinInterval,
-    startOfMonth,
     startOfQuarter,
     startOfWeek,
 } from 'date-fns';
@@ -87,10 +85,12 @@ export function useTimelineLayout(
 
     const range = useMemo<ComputedRange>(() => {
         if (viewMode === 'monthly') {
-            const start = startOfMonth(anchorDate);
-            const end = endOfMonth(anchorDate);
-            const days = eachDayOfInterval({ start, end });
-            return { start, end, days, weeks: [] };
+            // Show upcoming 2 months starting at the beginning of the current week (ISO week start Monday)
+            const start = startOfWeek(anchorDate, { weekStartsOn: 1 });
+            // End at exactly two months from the start minus 1 day to keep an inclusive range
+            const inclusiveEnd = addDays(addMonths(start, 2), -1);
+            const days = eachDayOfInterval({ start, end: inclusiveEnd });
+            return { start, end: inclusiveEnd, days, weeks: [] };
         } else {
             const start = startOfQuarter(anchorDate);
             const end = endOfQuarter(anchorDate);

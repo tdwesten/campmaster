@@ -27,7 +27,7 @@ export const ResourceSidebar = React.forwardRef<HTMLDivElement, ResourceSidebarP
     }, [resources]);
 
     return (
-        <div ref={ref} className="sticky left-0 z-20 border-r border-slate-200/70 bg-white/90 backdrop-blur" style={{ width }}>
+        <div ref={ref} className="absolute top-0 left-0 z-20 border-r border-slate-200/70 bg-white/90 backdrop-blur" style={{ width }}>
             {groups.map((g) => (
                 <div key={g.id}>
                     <div className="border-b border-slate-200/70 bg-slate-50 px-3 py-2 text-xs font-semibold tracking-wide text-slate-600 uppercase">

@@ -1,4 +1,4 @@
-import { AppArchive } from '@/components/app-archive';
+import { PageWrapper } from '@/components/page-wrapper';
 import DataTable from '@/components/data-table/data-table';
 import Paginator from '@/components/paginator';
 import AppLayout from '@/layouts/app-layout';
@@ -48,7 +48,7 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={trans('messages.guests.title')} />
 
-            <AppArchive title={trans('messages.guests.title')} subtitle={trans('messages.guests.subtitle')}>
+            <PageWrapper title={trans('messages.guests.title')} subtitle={trans('messages.guests.subtitle')}>
                 <DataTable<GuestItem, unknown>
                     columns={columns}
                     data={guests.data}
@@ -65,7 +65,7 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
                     links={guests.links}
                     onNavigate={go}
                 />
-            </AppArchive>
+            </PageWrapper>
         </AppLayout>
     );
 }

@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { Booking } from '@/types/timeline';
@@ -41,26 +40,13 @@ export function BookingBar({ booking, left, width, top, height, onClick }: Booki
 
     const content = (
         <button
+            data-component="BookingBar"
             type="button"
             aria-label={`Booking ${label}, from ${booking.start.toDateString()} to ${booking.end.toDateString()}`}
             className={classes}
             style={Object.assign({}, style, diagonalStyle)}
             onClick={() => onClick?.(booking)}
         >
-            <Avatar className="size-6">
-                {booking.avatarUrl ? (
-                    <AvatarImage src={booking.avatarUrl} alt={label} />
-                ) : (
-                    <AvatarFallback>
-                        {label
-                            .split(' ')
-                            .map((s) => s[0])
-                            .join('')
-                            .slice(0, 2)
-                            .toUpperCase()}
-                    </AvatarFallback>
-                )}
-            </Avatar>
             <span className="truncate text-sm" aria-hidden>
                 {label}
             </span>
@@ -81,7 +67,7 @@ export function BookingBar({ booking, left, width, top, height, onClick }: Booki
             <Tooltip>
                 <TooltipTrigger asChild>{content}</TooltipTrigger>
                 <TooltipContent>
-                    <div className="text-sm">
+                    <div className="text-sm" data-component="BookingBarTooltip">
                         <div className="font-medium">{label}</div>
                         <div>
                             {booking.start.toDateString()} – {booking.end.toDateString()}

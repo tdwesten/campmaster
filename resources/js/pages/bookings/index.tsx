@@ -1,4 +1,4 @@
-import { AppArchive } from '@/components/app-archive';
+import { PageWrapper } from '@/components/page-wrapper';
 import Timeline from '@/components/timeline/Timeline';
 import AppLayout from '@/layouts/app-layout';
 import type { Booking, Resource } from '@/types/timeline';
@@ -59,7 +59,7 @@ export default function BookingsIndex() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Bookings" />
 
-            <AppArchive title="Bookings" subtitle="Manage your bookings and reservations" fullWidth={true}>
+            <PageWrapper title="Bookings" subtitle="Manage your bookings and reservations" fullWidth={true}>
                 <div className="space-y-4 overflow-hidden">
                     <Timeline
                         resources={resources}
@@ -73,7 +73,7 @@ export default function BookingsIndex() {
                         liveUpdates={false}
                     />
                 </div>
-            </AppArchive>
+            </PageWrapper>
         </AppLayout>
     );
 }

@@ -38,6 +38,30 @@ return [
             'city' => 'City',
             'added' => 'Added',
         ],
+        'edit' => [
+            'title' => 'Edit Guest',
+            'subtitle' => 'Edit guest details',
+            'success_message' => [
+                'title' => 'Guest updated successfully',
+                'description' => 'The guest has been successfully updated.',
+            ],
+            'errors' => 'Failed to update guest.',
+            'buttons' => [
+                'update' => 'Update',
+                'save' => 'Save',
+                'cancel' => 'Cancel',
+            ],
+            'fields' => [
+                'firstname' => 'First Name',
+                'lastname' => 'Last Name',
+                'email' => 'Email',
+                'street' => 'Street',
+                'house_number' => 'House Number',
+                'postal_code' => 'Postal Code',
+                'city' => 'City',
+                'country' => 'Country',
+            ],
+        ],
     ],
 
     'bookings' => [

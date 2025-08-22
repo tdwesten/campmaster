@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 
 export interface GuestItem {
     id: string;
@@ -22,7 +23,11 @@ export function guestColumns(trans: (key: string) => string): ColumnDef<GuestIte
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
-            cell: ({ getValue }) => <span className="font-medium">{String(getValue())}</span>,
+            cell: ({ row, getValue }) => (
+                <Link href={route('guests.edit', row.original.id)} className="font-medium hover:underline">
+                    {String(getValue())}
+                </Link>
+            ),
             enableHiding: false,
         },
         {
