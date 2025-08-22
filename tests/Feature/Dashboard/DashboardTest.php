@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Guest;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Support\Facades\Config;
@@ -11,19 +10,15 @@ beforeEach(function () {
     $this->runLandlordMigrations();
 });
 
-it('shows the guests index page with pagination', function () {
+it('redirects home to dashboard', function () {
     $tenant = Tenant::factory()->create(['name' => 'Camping De Nachtegaal']);
     $tenant->makeCurrent();
 
     $user = User::factory()->create(['email_verified_at' => now()]);
-    Guest::factory()->count(3)->create();
 
-    $response = $this->actingAs($user)->get('/guests');
+    $response = $this->actingAs($user)->get('/');
 
+    // When authenticated, we expect the dashboard page component
     $response->assertOk();
-    $response->assertInertia(fn (Assert $page) => $page
-        ->component('guests/index')
-        ->has('guests.data')
-        ->has('actions.create_url')
-    );
+    $response->assertInertia(fn (Assert $page) => $page->component('dashboard'));
 });
