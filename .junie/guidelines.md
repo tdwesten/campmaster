@@ -1,18 +1,18 @@
 # Architecture Guidelines for Campmaster
 
 ## Purpose and Overview
-
 - Professional and efficient campsite management application
 - Handles index, places, guests, payments, reports etc.
 
 ## Event Sourcing Implementation
-
 - Uses Spatie Event Sourcing package
 - Reservations/bookings stored as events (e.g. ReservationCreated, PaymentReceived)
 - Aggregates manage reservation status
 - Projections/read models enable fast reporting
 
 ## Data Model Structure
+
+- User the Laravel Boost MCP functions for model information
 - Use UUIDs for unique identifiers
 - Database migrations for schema management
 - Create factories for test data generation
@@ -42,7 +42,13 @@
     - `domain`: Subdomain for the tenant (e.g. `campingdenachtegaal`), automatically generated as a slug from the name and cannot be overwritten
     - `created_at`, `updated_at`: Timestamps
 
-### Bookings and Guests
+### Bookings
+
+- Bookings are managed via Event Sourcing using Spatie's package
+- Each booking action (create, update, cancel, payment) is an event
+- Events are stored in the `stored_events` table
+- The Events are projected to the `bookings` table
+
 - `bookings` table contains main reservation data:
     - Guest details
     - Period

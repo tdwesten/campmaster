@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Booking;
+use App\Domain\Booking\Actions\CreateBookingAction;
+use App\Domain\Booking\Actions\SelectBookingSiteAction;
 use App\Models\Guest;
 use App\Models\Site;
 use App\Models\Tenant;
@@ -12,7 +13,7 @@ use Illuminate\Support\Str;
 class BookingSeeder extends Seeder
 {
     /**
-     * Seed the bookings (reservations) table with demo data for each tenant.
+     * Seed the bookings (reservations) table with demo data for each tenant using event-sourced actions.
      */
     public function run(): void
     {
@@ -44,16 +45,34 @@ class BookingSeeder extends Seeder
             // Create a realistic number of bookings per tenant
             $count = 35; // default amount of demo reservations per tenant
 
-            Booking::factory()
-                ->count($count)
-                ->state(function () use ($tenant, $guestIds, $siteIds): array {
-                    return [
-                        'tenant_id' => $tenant->id,
-                        'guest_id' => $guestIds->random(),
-                        'site_id' => $siteIds->random(),
-                    ];
-                })
-                ->create();
+            $createBooking = new CreateBookingAction;
+            $selectSite = new SelectBookingSiteAction;
+
+            for ($i = 0; $i < $count; $i++) {
+                $guestId = (string) $guestIds->random();
+                $siteId = (string) $siteIds->random();
+
+                // Generate a random date range within the next 120 days
+                $start = now()->addDays(random_int(0, 90))->format('Y-m-d');
+                $end = now()->addDays(random_int(91, 120))->format('Y-m-d');
+
+                // Ensure end is after start by at least 1 day
+                if ($end <= $start) {
+                    $end = now()->parse($start)->addDays(random_int(2, 14))->format('Y-m-d');
+                }
+
+                // Create booking via event-sourced action (tenant inferred from current tenant)
+                $bookingUuid = $createBooking->execute(
+                    guestUuid: $guestId,
+                    startDate: $start,
+                    endDate: $end,
+                    notes: null,
+                    tenantUuid: null,
+                );
+
+                // Select a site for the booking via event-sourced action
+                $selectSite->execute($bookingUuid, $siteId);
+            }
         });
     }
 }

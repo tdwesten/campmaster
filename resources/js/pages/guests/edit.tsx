@@ -65,7 +65,7 @@ export default function GuestsEdit({ guest }: GuestsEditPageProps) {
                         <AlertDescription>{trans('messages.guests.edit.success_message.description')}</AlertDescription>
                     </Alert>
                 )}
-                <FormWrapper title={trans('messages.guests.edit.form_title')} subtitle={trans('messages.guests.edit.form_subtitle')}>
+                <FormWrapper title={trans('messages.guests.edit.form_title')}>
                     <form onSubmit={submit} className="grid grid-cols-1 gap-6">
                         <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
                             <div className="grid gap-2">

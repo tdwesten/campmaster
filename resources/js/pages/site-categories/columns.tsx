@@ -30,35 +30,9 @@ export function siteCategoryColumns(trans: (key: string) => string): ColumnDef<C
             enableHiding: false,
         },
         {
-            accessorKey: 'slug',
-            header: ({ column }) => (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    {trans('messages.site_categories.columns.slug')}
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
-            cell: ({ row }) => row.original.slug,
-        },
-        {
-            accessorKey: 'sites_count',
-            header: ({ column }) => (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    {trans('messages.site_categories.columns.sites')}
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
-            cell: ({ row }) => row.original.sites_count,
-        },
-        {
-            id: 'created_at',
-            accessorFn: (row) => (row.created_at ? new Date(row.created_at) : null),
-            header: ({ column }) => (
-                <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                    {trans('messages.site_categories.columns.added')}
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
-            cell: ({ row }) => (row.original.created_at ? new Date(row.original.created_at).toLocaleString() : '-'),
+            accessorKey: 'description',
+            header: ({ column }) => trans('messages.site_categories.columns.description'),
+            cell: ({ row }) => row.original.description || '-',
         },
     ];
 }

@@ -19,7 +19,7 @@ export function PageWrapper({ fullWidth, children, actions, ...props }: PageWrap
             )}
             {...props}
         >
-            <div className="flex items-start gap-4">
+            <div className="flex items-center justify-center gap-4">
                 <div className="mt-4 flex-1">
                     <h1 className="text-2xl font-bold">{props.title}</h1>
                     {props.subtitle && <p className="text-sm text-gray-500">{props.subtitle}</p>}
