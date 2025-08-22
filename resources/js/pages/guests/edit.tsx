@@ -1,3 +1,4 @@
+import FormWrapper from '@/components/form-wrapper';
 import InputError from '@/components/input-error';
 import { PageWrapper } from '@/components/page-wrapper';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -24,9 +25,6 @@ interface GuestsEditPageProps {
     guest: GuestFormData;
 }
 
-function FormWrapper(props: { children: React.ReactNode }) {
-    return <div className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">{props.children}</div>;
-}
 export default function GuestsEdit({ guest }: GuestsEditPageProps) {
     const { data, setData, put, processing, errors, wasSuccessful } = useForm({
         firstname: guest.firstname ?? '',
@@ -55,16 +53,19 @@ export default function GuestsEdit({ guest }: GuestsEditPageProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={trans('messages.guests.edit.title', { name: guest.firstname }, true)} />
+            <Head title={trans('messages.guests.edit.title', { name: `${guest.firstname} ${guest.lastname}` })} />
 
-            <PageWrapper title={trans('messages.guests.edit.title')} subtitle={trans('messages.guests.edit.subtitle')}>
+            <PageWrapper
+                title={trans('messages.guests.edit.title', { name: `${guest.firstname} ${guest.lastname}` })}
+                subtitle={trans('messages.guests.edit.subtitle')}
+            >
                 {wasSuccessful && (
                     <Alert variant="success">
                         <AlertTitle>{trans('messages.guests.edit.success_message.title')}</AlertTitle>
                         <AlertDescription>{trans('messages.guests.edit.success_message.description')}</AlertDescription>
                     </Alert>
                 )}
-                <FormWrapper>
+                <FormWrapper title={trans('messages.guests.edit.form_title')} subtitle={trans('messages.guests.edit.form_subtitle')}>
                     <form onSubmit={submit} className="grid grid-cols-1 gap-6">
                         <div className="grid gap-2 sm:grid-cols-2 sm:gap-4">
                             <div className="grid gap-2">

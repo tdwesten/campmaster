@@ -42,8 +42,9 @@ return [
             'create' => 'Create guest',
         ],
         'edit' => [
-            'title' => 'Edit Guest',
+            'title' => 'Edit Guest ":name"',
             'subtitle' => 'Edit guest details',
+            'form_title' => 'General Information',
             'success_message' => [
                 'title' => 'Guest updated successfully',
                 'description' => 'The guest has been successfully updated.',
