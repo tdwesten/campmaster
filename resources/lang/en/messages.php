@@ -38,6 +38,9 @@ return [
             'city' => 'City',
             'added' => 'Added',
         ],
+        'actions' => [
+            'create' => 'Create guest',
+        ],
         'edit' => [
             'title' => 'Edit Guest',
             'subtitle' => 'Edit guest details',
@@ -49,6 +52,29 @@ return [
             'buttons' => [
                 'update' => 'Update',
                 'save' => 'Save',
+                'cancel' => 'Cancel',
+            ],
+            'fields' => [
+                'firstname' => 'First Name',
+                'lastname' => 'Last Name',
+                'email' => 'Email',
+                'street' => 'Street',
+                'house_number' => 'House Number',
+                'postal_code' => 'Postal Code',
+                'city' => 'City',
+                'country' => 'Country',
+            ],
+        ],
+        'create' => [
+            'title' => 'Create Guest',
+            'subtitle' => 'Create a new guest',
+            'success_message' => [
+                'title' => 'Guest created successfully',
+                'description' => 'The guest has been successfully created.',
+            ],
+            'errors' => 'Failed to create guest.',
+            'buttons' => [
+                'create' => 'Create',
                 'cancel' => 'Cancel',
             ],
             'fields' => [

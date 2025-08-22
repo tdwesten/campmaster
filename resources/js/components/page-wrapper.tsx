@@ -6,9 +6,10 @@ interface PageWrapperProps extends React.ComponentProps<'main'> {
     title?: string;
     subtitle?: string;
     fullWidth?: boolean;
+    actions?: React.ReactNode;
 }
 
-export function PageWrapper({ fullWidth, children, ...props }: PageWrapperProps) {
+export function PageWrapper({ fullWidth, children, actions, ...props }: PageWrapperProps) {
     return (
         <main
             className={cn(
@@ -18,11 +19,12 @@ export function PageWrapper({ fullWidth, children, ...props }: PageWrapperProps)
             )}
             {...props}
         >
-            <div className="flex">
+            <div className="flex items-start gap-4">
                 <div className="mt-4 flex-1">
                     <h1 className="text-2xl font-bold">{props.title}</h1>
                     {props.subtitle && <p className="text-sm text-gray-500">{props.subtitle}</p>}
                 </div>
+                {actions && <div className="mt-4 flex items-center">{actions}</div>}
             </div>
             {children}
         </main>

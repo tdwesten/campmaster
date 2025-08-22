@@ -38,5 +38,6 @@ it('shows guests paginated and sorted by latest created first', function () {
         ->where('guests.per_page', 15)
         ->has('guests.data', 15)
         ->where('guests.data.0.id', $latest->id)
+        ->where('actions.create_url', route('guests.create'))
     );
 });

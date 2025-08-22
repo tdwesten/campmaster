@@ -2,8 +2,9 @@ import { PageWrapper } from '@/components/page-wrapper';
 import DataTable from '@/components/data-table/data-table';
 import Paginator from '@/components/paginator';
 import AppLayout from '@/layouts/app-layout';
+import { Button } from '@/components/ui/button';
 import useLingua from '@cyberwolf.studio/lingua-react';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { guestColumns, type GuestItem } from './columns';
 
 interface PaginationLink {
@@ -23,9 +24,12 @@ interface GuestsPageProps {
         next_page_url: string | null;
         links: PaginationLink[];
     };
+    actions?: {
+        create_url: string;
+    };
 }
 
-export default function GuestsIndex({ guests }: GuestsPageProps) {
+export default function GuestsIndex({ guests, actions }: GuestsPageProps) {
     const { trans } = useLingua();
 
     const breadcrumbs = [
@@ -48,7 +52,15 @@ export default function GuestsIndex({ guests }: GuestsPageProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={trans('messages.guests.title')} />
 
-            <PageWrapper title={trans('messages.guests.title')} subtitle={trans('messages.guests.subtitle')}>
+            <PageWrapper
+                title={trans('messages.guests.title')}
+                subtitle={trans('messages.guests.subtitle')}
+                actions={
+                    <Link href={actions?.create_url ?? route('guests.create')}>
+                        <Button>{trans('messages.guests.actions.create')}</Button>
+                    </Link>
+                }
+            >
                 <DataTable<GuestItem, unknown>
                     columns={columns}
                     data={guests.data}

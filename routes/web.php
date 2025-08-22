@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         return Inertia::render('guests/index', [
             'guests' => $guests,
+            'actions' => [
+                'create_url' => route('guests.create'),
+            ],
         ]);
     })->name('guests.index');
 
@@ -67,6 +70,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'guest' => $guest,
         ])->with('success', __('messages.guests.edit.subtitle'));
     })->name('guests.update');
+
+    Route::get('/guests/create', function () {
+        return Inertia::render('guests/create');
+    })->name('guests.create');
+
+    Route::post('/guests', function (GuestUpdateRequest $request) {
+        $guest = Guest::create($request->validated());
+
+        return redirect()->route('guests.edit', [
+            'guest' => $guest,
+        ])->with('success', __('messages.guests.create.subtitle'));
+    })->name('guests.store');
 });
 
 require __DIR__.'/settings.php';
