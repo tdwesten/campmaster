@@ -4,8 +4,8 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import useLingua from '@cyberwolf.studio/lingua-react';
-import { Link } from '@inertiajs/react';
-import { BookOpen, CalendarCheck, CogIcon, LayoutGrid, TagIcon, TentIcon, Users } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { CalendarCheck, CogIcon, LayoutGrid, TagIcon, TentIcon, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 let mainNavItems: NavItem[] = [
@@ -39,25 +39,22 @@ let configurationNavMenuItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
+let footerNavItems: NavItem[] = [
     {
-        title: 'General Settings',
-        href: '/settings',
+        title: 'messages.sidebar.settings',
+        href: route('profile.edit'),
         icon: CogIcon,
-    },
-    {
-        title: 'Site',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
     },
 ];
 
 export function AppSidebar() {
     const { trans } = useLingua();
+    const page = usePage();
 
-    [mainNavItems, configurationNavMenuItems] = [mainNavItems, configurationNavMenuItems].map((items) =>
+    [mainNavItems, configurationNavMenuItems, footerNavItems] = [mainNavItems, configurationNavMenuItems, footerNavItems].map((items) =>
         items.map((item) => ({
             ...item,
+            isActive: item.href.endsWith(page.url),
             title: trans(item.title),
         })),
     );
