@@ -45,28 +45,64 @@
     - `created_at`, `updated_at`: Timestamps
 
 ### Bookings
-
 - Bookings are managed via Event Sourcing using Spatie's package
 - Each booking action (create, update, cancel, payment) is an event
 - Events are stored in the `stored_events` table
 - The Events are projected to the `bookings` table
+- The `bookings` table contains the main booking data:
+    - Booking ID
+    - Booking Reference (e.g. #{CustomPrefix = default "CM"}#{Year}#{BookingNumber} / e.g. "CM20230001")
+    - Period (start and end date)
+    - Rental unit (`site`) -> campsite, cabin, etc.
+    - Guest details via relation to `guests` table
+    - Booking status (`pending`, `confirmed`, `cancelled`, `paid`)
+    - Booking total amount before tax
+    - Booking tax amount
+    - Booking total amount after tax
+    - Booking notes
+    - Booking created at
+    - Booking updated at
+    - Booking cancelled at
+    - Booking paid at
+    - Booking payment method (`cash`, `creditcard`, `paypal`, `banktransfer`, `other`)
+    - Booking payment reference
+    - Booking payments relation to `payments` table
+- A booking can have multiple payments (e.g. deposit, final payment, extra charges)
+- A booking can have multiple booking items (e.g. campfire wood, extra guests, pets etc.)
 
-- `bookings` table contains main reservation data:
-    - Guest details
-    - Period
-    - Rental unit
-- `guests` table stores main guest/contact person data
+### Booking Item Types
 
+- Booking item types are types the admin can create (e.g. Campfire wood, Extra guest, Pet etc.)
+- Booking item types are stored in the `booking_item_types` table
+- The `booking_item_types` table contains the main booking item type data:
+    - Booking item type ID (uuid)
+    - Booking item type name (e.g. Campfire wood)
+    - Booking item type interval_type (`night`, `period`)
+    - Booking item type price per unit (e.g. 500)
+    - Booking item type tax_class_id (relation/reference to `tax_classes` table)
+    - Booking item type active (boolean)
+    - Booking item type created at
+    - Booking item type updated at
+    - Booking item type deleted at
 
-### Extra Costs and Options
-- `products` table for all possible extras:
-    - Electricity
-    - Campfire wood
-    - Bed linen
-    - Extra guests
-    - Pets
-- `booking_items` table links extras to index
-- Flexible model requires no changes for new products/services
+### Booking Items
+
+- Booking items are managed via Event Sourcing using Spatie's package
+- Each booking item action (create, update, delete) is an event
+- Events are stored in the `stored_events` table
+- The Events are projected to the `booking_items` table for each booking
+- The `booking_items` table contains the main booking item data:
+    - Booking item ID (uuid)
+    - Booking item type_id (relation/reference to `booking_item_types` table)
+    - Booking item quantity (e.g. 2)
+    - Booking item total price (e.g. 10.00)
+    - Booking item tax amount (e.g. 1.00)
+    - Booking item total price after tax (e.g. 11.00)
+    - Booking item notes
+    - Booking item relation to `bookings` table
+    - Booking item created at
+    - Booking item updated at
+    - Booking item deleted at
 
 ### Tourist Tax Handling
 - Separate table for tourist tax rates by:
