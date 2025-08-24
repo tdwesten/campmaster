@@ -11,26 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookings', function (Blueprint $table) {
+        Schema::create('tax_classes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('tenant_id')
                 ->references('id')
                 ->on('tenants')
                 ->onDelete('cascade');
 
-            $table->foreignUuid('guest_id')
-                ->references('id')->on('guests');
+            $table->string('name');
+            $table->string('description');
+            $table->unsignedInteger('rate_bps')->nullable();
+            $table->unsignedInteger('fixed_amount_minor')->nullable();
+            $table->boolean('active')->default(true);
+            $table->string('interval_type');
+            $table->string('calculation_type');
 
-            $table->string('status');
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->text('notes')->nullable();
+            $table->softDeletes();
             $table->timestamps();
 
-            $table->index('tenant_id');
-            $table->index('guest_id');
-            $table->index('status');
-            $table->index(['start_date', 'end_date']);
+            $table->index(['tenant_id', 'name']);
         });
     }
 
@@ -39,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bookings');
+        Schema::dropIfExists('tax_classes');
     }
 };
